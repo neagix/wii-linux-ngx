@@ -2476,6 +2476,9 @@ start_ieee80211:
 	wl->hw->queues = B43_QOS_QUEUE_NUM;
 	if (!modparam_qos || dev->fw.opensource)
 		wl->hw->queues = 1;
+	/* The Wii's SDIO receive path cannot deliver QoS data frames. */
+	if (b43_bus_host_is_sdio(dev->dev))
+		wl->hw->queues = 1;
 
 	err = ieee80211_register_hw(wl->hw);
 	if (err)
